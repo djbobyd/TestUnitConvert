@@ -20,18 +20,43 @@ namespace TestUnitConvert
         static void Main(string[] args)
         {
             Console.WriteLine(Calculate("SquareInch","SquareMeter",4));
-            Type[] _types=GetUnitTypes(GetTypesInNamespace(UnitsNetAssembly,"UnitsNet.Units"));
+            Type[] _types=GetQuantityTypes(GetTypesInNamespace(UnitsNetAssembly,QuantityNamespace));
+            Type[] _unitTypes=GetUnitTypes(GetTypesInNamespace(UnitsNetAssembly,UnitTypeNamespace));
             foreach (Type t in _types)
             {
-                Console.WriteLine(t.Name);
+                //Console.WriteLine(t.Name);
+                MethodInfo methodInfo = t.GetMethod("GetAbbreviation");
+                ParameterInfo[] parameters = methodInfo.GetParameters();
+                object[] parametersArray = { "Killogram" };
+                var result= methodInfo.Invoke(t,parametersArray);
+                Console.WriteLine(result);
             }
+            foreach (Type t in _unitTypes)
+            {
+                Console.WriteLine(t.GetEnumValues().GetValue(1));
+            }
+
             //Console.ReadKey();
         }
 
-        private static Type[] GetUnitTypes(Type [] tp)
+        private static Type[] GetQuantityTypes(Type[] tp)
         {
             List<Type> arr=new List<Type>();
-            foreach (Type t in tp)
+                        foreach (Type t in tp)
+                        {
+                            if (t.IsValueType)
+                            {
+                                arr.Add(t);
+                            }
+                        }
+            
+                        return arr.ToArray();
+        }
+
+        private static Type[] GetUnitTypes(Type [] utp)
+        {
+            List<Type> arr=new List<Type>();
+            foreach (Type t in utp)
             {
                 //if (t.BaseType.Name.Equals("ValueType"))
                 {
