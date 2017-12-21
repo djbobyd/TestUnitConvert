@@ -22,18 +22,26 @@ namespace TestUnitConvert
             Console.WriteLine(Calculate("SquareInch","SquareMeter",4));
             Type[] _types=GetQuantityTypes(GetTypesInNamespace(UnitsNetAssembly,QuantityNamespace));
             Type[] _unitTypes=GetUnitTypes(GetTypesInNamespace(UnitsNetAssembly,UnitTypeNamespace));
+            String[] parametersArray = { "Killogram" };
             foreach (Type t in _types)
             {
-                //Console.WriteLine(t.Name);
-                MethodInfo methodInfo = t.GetMethod("GetAbbreviation");
+                Console.WriteLine(t.Name);
+                
+                /*Console.WriteLine(typeof(LengthUnit).BaseType.Name);
+                Console.WriteLine(typeof(AmplitudeRatioUnit));
+                MethodInfo methodInfo = t.GetMethod("GetAbbreviation", new[] {typeof(Enum)});
                 ParameterInfo[] parameters = methodInfo.GetParameters();
-                object[] parametersArray = { "Killogram" };
+                parameters.GetLength(0);
                 var result= methodInfo.Invoke(t,parametersArray);
-                Console.WriteLine(result);
+                Console.WriteLine(result);*/
             }
             foreach (Type t in _unitTypes)
             {
-                Console.WriteLine(t.GetEnumValues().GetValue(1));
+                if (!t.Name.Equals("AmplitudeRatio" + "Unit")) continue;
+                var units = t.GetEnumValues();
+                foreach (var unit in units){
+                    Console.WriteLine(unit);
+                }
             }
 
             //Console.ReadKey();
