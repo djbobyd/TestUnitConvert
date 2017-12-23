@@ -23,24 +23,39 @@ namespace TestUnitConvert
             Type[] _types=GetQuantityTypes(GetTypesInNamespace(UnitsNetAssembly,QuantityNamespace));
             Type[] _unitTypes=GetUnitTypes(GetTypesInNamespace(UnitsNetAssembly,UnitTypeNamespace));
             String[] parametersArray = { "Killogram" };
+            Type ppp=UnitsNetAssembly.GetType("UnitsNet.Length");
+            MethodInfo mmm=ppp.GetMethods().First(m =>
+                m.Name == "GetAbbreviation" && m.IsStatic && m.IsPublic &&
+                m.ReturnType == typeof(string));
+            //mmm.Invoke("")
+            Type vvv;
+            Mass.TryParse("gram",out vvv);
+            Mass.GetAbbreviation(vvv);
             foreach (Type t in _types)
             {
-                Console.WriteLine(t.Name);
                 
-                /*Console.WriteLine(typeof(LengthUnit).BaseType.Name);
-                Console.WriteLine(typeof(AmplitudeRatioUnit));
-                MethodInfo methodInfo = t.GetMethod("GetAbbreviation", new[] {typeof(Enum)});
-                ParameterInfo[] parameters = methodInfo.GetParameters();
-                parameters.GetLength(0);
-                var result= methodInfo.Invoke(t,parametersArray);
-                Console.WriteLine(result);*/
+                //Console.WriteLine(t.Name);
+                //Console.WriteLine(_unitTypes[0].BaseType);
+
+                //t.GetDeclaredMethods().Single(m => m.Name == "As" && !m.IsStatic && m.IsPublic && HasParameterTypes(m, _unitTypes[0]) && m.ReturnType == typeof(double));
+                //MethodInfo method = t.GetMethod("GetAbbreviation",new [] {typeof ()});
+                //ParameterInfo[] param = method.GetParameters();
+
+                //Console.WriteLine(typeof(LengthUnit).BaseType.Name);
+                //Console.WriteLine(typeof(AmplitudeRatioUnit));
+                //MethodInfo methodInfo = t.GetMethod("GetAbbreviation", new [] {typeof (UnitsNet.)});
+                //ParameterInfo[] parameters = methodInfo.GetParameters();
+                //parameters.GetLength(0);
+                //var result= methodInfo.Invoke(t,parametersArray);
+                //Console.WriteLine(result);
             }
             foreach (Type t in _unitTypes)
             {
-                if (!t.Name.Equals("AmplitudeRatio" + "Unit")) continue;
+                if (!t.Name.Equals("Length" + "Unit")) continue;
                 var units = t.GetEnumValues();
                 foreach (var unit in units){
-                    Console.WriteLine(unit);
+                    if (unit.ToString().Equals("Undefined")) continue;
+                    //Console.WriteLine(unit);
                 }
             }
 
@@ -52,10 +67,10 @@ namespace TestUnitConvert
             List<Type> arr=new List<Type>();
                         foreach (Type t in tp)
                         {
-                            if (t.IsValueType)
-                            {
-                                arr.Add(t);
-                            }
+                            if (!t.BaseType.Name.Equals("ValueType") || t.Name.Equals("Vector2") ||
+                                t.Name.Equals("Vector3") ||
+                                t.Name.Equals("QuantityValue") || t.Name.Equals("Length2d")) continue;
+                            arr.Add(t);
                         }
             
                         return arr.ToArray();
@@ -66,7 +81,6 @@ namespace TestUnitConvert
             List<Type> arr=new List<Type>();
             foreach (Type t in utp)
             {
-                //if (t.BaseType.Name.Equals("ValueType"))
                 {
                     arr.Add(t);
                 }
